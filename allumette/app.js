@@ -9,8 +9,8 @@ var bodyParser = require("body-parser"); // donne accès aux paramètres contenu
 // Dans notre cas, ces variables sont :
 // - l'URL de l'hébergeur de notre base de données
 // - le port sur lequel est accessible le serveur
-var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017";
-//var MONGODB_URI = process.env.MONGODB_URI || "mongodb + srv : // abienda : 4UFFceAXI5QFZba4 @ cluster0-rm5mx.mongodb.net / test ? retryWrites = true & w = majoritaire";
+//var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017";
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb + srv : // abienda : 4UFFceAXI5QFZba4 @ cluster0-rm5mx.mongodb.net / test ? retryWrites = true & w = majoritaire";
 var PORT_NUMBER = process.env.PORT || 3000;
 
  
