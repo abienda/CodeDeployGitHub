@@ -3,20 +3,26 @@ var path = require("path");
 var app = express();
 var db = require("./db"); // utilitaire qui nous sert d'interface avec l'instance de MongoDB
 var session = require("express-session"); // gestion des sessions
+var mongoose = require('mongoose');
 var bodyParser = require("body-parser"); // donne accès aux paramètres contenus dans le corps de la requête à travers le champ 'req.body'
+
+const MongoStore = require("connect-mongo")(session);
 
 // Selon que l'on soit en mode développement ou en mode production, certaines variables d'environnement peuvent être fournies par le système sur lequel s'exécute notre serveur Express.
 // Dans notre cas, ces variables sont :
 // - l'URL de l'hébergeur de notre base de données
 // - le port sur lequel est accessible le serveur
 //var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017";
-var MONGODB_URI = process.env.MONGODB_URI || "mongodb + srv : // abienda : 4UFFceAXI5QFZba4 @ cluster0-rm5mx.mongodb.net / test ? retryWrites = true & w = majoritaire";
-var PORT_NUMBER = process.env.PORT || 3000;
+//var PORT_NUMBER = process.env.PORT || 3000;
 
- 
+const MongoClient = require('mongodb').MongoClient;
+const uri = "mongodb+srv://gomis_abienda@yahoo.fr:4UFFceAXI5QFZba4@cluster0-rm5mx.mongodb.net/test?retryWrites=true&w=majority";
+const client = new MongoClient(uri, { useNewUrlParser: true });
 
-//Ajout
-//var dbName = 'blog';
+
+
+
+
 //**********//
 app.set("view engine", "pug");
 app.set("views", "./views"); // specify the views directory
@@ -47,13 +53,19 @@ app.use("/lib", express.static(path.join(__dirname, "/public/lib")));
 
 // Création de session
 app.set("trust proxy", 1); // trust first proxy
-app.use(
-  session({
-    secret: "keyboard cat",
-    resave: false,
-    saveUninitialized: true
-  })
-);
+
+//message d'erreur
+/*app.use(session({
+  store: new MongoStore({
+      url: "mongodb+srv://gomis_abienda@yahoo.fr:4UFFceAXI5QFZba4@cluster0-rm5mx.mongodb.net/test?retryWrites=true&w=majority"
+  }),
+  secret: "keyboard cat",
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+      maxAge: 1000 * 60 * 60 * 24 * 7 * 2 // two weeks
+  }
+}));*/
 
 // Route principale, renvoie la page d'accueil
 // Système de routage. Voir le dossier 'routing'
@@ -82,7 +94,7 @@ app.use(function(err, req, res, next) {
  * IMPORTANT :
  * On se connecte à la base de données au lancement de l'application puis on ne referme plus jamais la connection jusqu'à ce que l'application s'arrête.
  */
-db.connect(MONGODB_URI, function(err) {
+/*db.connect(MONGODB_URI, function(err) {
   if (!err) {
     app.listen(PORT_NUMBER, function() {
       console.log("listening on *:%d", PORT_NUMBER);
@@ -91,3 +103,13 @@ db.connect(MONGODB_URI, function(err) {
     console.log("mongodb is not connected");
   }
 });
+*/
+
+const http = require('http');
+
+http.createServer(function (req, res) {
+  res.writeHead(200, {'Content-Type': 'text/plain'});
+  res.end('Hello World\n');
+}).listen(process.env.PORT || 5000);
+
+console.log('Server currently listening...' + process.env.PORT);
