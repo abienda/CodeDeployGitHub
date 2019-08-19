@@ -12,15 +12,9 @@ const MongoStore = require("connect-mongo")(session);
 // Dans notre cas, ces variables sont :
 // - l'URL de l'hébergeur de notre base de données
 // - le port sur lequel est accessible le serveur
-//var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017";
-//var PORT_NUMBER = process.env.PORT || 3000;
 
-const MongoClient = require('mongodb').MongoClient;
-const uri = "mongodb+srv://gomis_abienda@yahoo.fr:4UFFceAXI5QFZba4@cluster0-rm5mx.mongodb.net/test?retryWrites=true&w=majority";
-const client = new MongoClient(uri, { useNewUrlParser: true });
-
-
-
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb+srv://abienda:OFZvP6DMAsOyI30I@cluster0-rm5mx.mongodb.net/test?retryWrites=true&w=majority";
+var PORT_NUMBER = process.env.PORT || 8080;
 
 
 //**********//
@@ -54,22 +48,26 @@ app.use("/lib", express.static(path.join(__dirname, "/public/lib")));
 // Création de session
 app.set("trust proxy", 1); // trust first proxy
 
-//message d'erreur
-/*app.use(session({
-  store: new MongoStore({
-      url: "mongodb+srv://gomis_abienda@yahoo.fr:4UFFceAXI5QFZba4@cluster0-rm5mx.mongodb.net/test?retryWrites=true&w=majority"
-  }),
-  secret: "keyboard cat",
+app.use(session({
   resave: false,
-  saveUninitialized: false,
-  cookie: {
-      maxAge: 1000 * 60 * 60 * 24 * 7 * 2 // two weeks
-  }
-}));*/
+  secret: "keyboard cat",
+  saveUninitialized: true, // don't create session until something stored
+  store: new MongoStore({
+      url: "mongodb+srv://abienda:OFZvP6DMAsOyI30I@cluster0-rm5mx.mongodb.net/test?retryWrites=true&w=majority"
+  })
+}));
+
+
 
 // Route principale, renvoie la page d'accueil
 // Système de routage. Voir le dossier 'routing'
 app.use("/", require("./routing"));
+
+app.get('/', function(req, res) {
+
+  // ejs render automatically looks in the views folder
+  res.render('index');
+});
 
 // Middleware pour les 404
 app.use(function(req, res, next) {
@@ -94,7 +92,9 @@ app.use(function(err, req, res, next) {
  * IMPORTANT :
  * On se connecte à la base de données au lancement de l'application puis on ne referme plus jamais la connection jusqu'à ce que l'application s'arrête.
  */
-/*db.connect(MONGODB_URI, function(err) {
+
+
+db.connect(MONGODB_URI, function(err) {
   if (!err) {
     app.listen(PORT_NUMBER, function() {
       console.log("listening on *:%d", PORT_NUMBER);
@@ -103,13 +103,3 @@ app.use(function(err, req, res, next) {
     console.log("mongodb is not connected");
   }
 });
-*/
-
-const http = require('http');
-
-http.createServer(function (req, res) {
-  res.writeHead(200, {'Content-Type': 'text/plain'});
-  res.end('Hello World\n');
-}).listen(process.env.PORT || 5000);
-
-console.log('Server currently listening...' + process.env.PORT);
