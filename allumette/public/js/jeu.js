@@ -1,9 +1,5 @@
 //(function() {
 
-// Données
-var pollingIntervalID = null;
-var intervalPolling = 1000;
-//*********************//
 
 var nb=0;
   var jeu=true;
@@ -44,19 +40,7 @@ var nb=0;
   
       }
 
-
-    //test 2
-    /*function demarrerPolling() {
-      pollingIntervalID = setInterval(
-        function(){insereimg(ElmtReste)},
-        intervalPolling
-      );
-    }
-  
-    function arreterLePolling() {
-      clearInterval(pollingIntervalID);
-    }*/
-    //***************************//  
+ 
 
     function insereimg(id){
       var elmt=Byid(id);
@@ -122,9 +106,5 @@ var nb=0;
       
     }
 
-    //setTimeout(function(){insereimg("reste")},1000);
-    //setTimeout(function(){insereimg("trfeu")},1000);
-    //setTimeout('Byid()',1400);
-  // Interroger le serveur à intervales réguliers pour vérifier si de nouveaux commentaires ont été publiés
-  //demarrerPolling();
+
 //})();
